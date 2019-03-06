@@ -1,7 +1,3 @@
-int control(int s) {
-  return s - afstand;
-}
-
 float getDistance(struct US* US) {
   // Measuring the distance from the US sensor in cm
   unsigned long t;
@@ -11,6 +7,6 @@ float getDistance(struct US* US) {
   delay(0.01);
   digitalWrite(US -> trig, LOW);
 
-  t = pulseIn(US -> echo, HIGH);  // wait for echo and measure time delay
+  t = pulseIn(US -> echo, HIGH); // wait for echo and measure time delay
   return t * 0.034 / 2.0;  // return the distance in cm
 }

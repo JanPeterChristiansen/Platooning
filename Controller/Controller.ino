@@ -1,43 +1,63 @@
-const int speedPin = 9;
-const int motorPinL1 = 3;
-const int motorPinL2 = 4;
-const int motorPinR1 = 5;
-const int motorPinR2 = 6;
+struct motor { // Pin setup for motor
+  int speed;
+  int pin1;
+  int pin2;
+};
 
-struct US {
-  const int trig = 12;
-  const int echo = 13;
+struct motor right = {9, 3, 4};
+struct motor left = {9, 5, 6};
+
+struct US { // pin setup for US sensor
+  const int Vcc = 40;
+  const int trig = 38;
+  const int echo = 36;
+  const int GND = 34;
 };
 struct US US;
 
-int motorSpeed = 50;
-int afstand = 20;
+// dummies:
+
+int targetSpeed = 50;
+int motorSpeed = targetSpeed;
+float targetDistance = 20.0;
+
 
 void setup() {
 
-  pinMode(motorPinL1, OUTPUT);
-  pinMode(motorPinL2, OUTPUT);
-  pinMode(motorPinR1, OUTPUT);
-  pinMode(motorPinR2, OUTPUT);
-  
+  pinMode(right.pin1, OUTPUT);
+  pinMode(right.pin2, OUTPUT);
+  pinMode(left.pin1, OUTPUT);
+  pinMode(left.pin2, OUTPUT);
+  stopMotor(&left);
+  stopMotor(&right);
+
+  pinMode(US.Vcc, OUTPUT);
   pinMode(US.trig, OUTPUT);
   pinMode(US.echo, INPUT);
-  digitalWrite(11, HIGH);
+  pinMode(US.GND, OUTPUT);
+  digitalWrite(US.Vcc, HIGH);
+  digitalWrite(US.GND, LOW);
 
   Serial.begin(9600);
   Serial.print("Setup Done");
+
+  setMotorSpeed(&left, targetSpeed);
+  setMotorSpeed(&right, targetSpeed);
+
 }
 
 void loop() {
 
-  motorSpeed += control(getDistance(&US));
-  if (motorSpeed > 50) {
-    motorSpeed = 50;
-  }
-  if (motorSpeed <= 0) {
+  if (getDistance(&US) < 10.0 ) {
     motorSpeed = 0;
   }
+  else {
+    motorSpeed = targetSpeed;
+  }
+  
+  Serial.println(getDistance(&US), 3);
   Serial.println(motorSpeed);
-  delay(1000);
+  setMotorSpeed(&left, motorSpeed);
+  setMotorSpeed(&right, motorSpeed);
 
 }
