@@ -35,13 +35,17 @@ class ultraSoundSensor {
     int _distance;
 };
 
+
+
+
+
 void setup() {
 
   motor rightMotor(3, 4, 9);
   motor leftMotor(5, 6, 9);
   ultraSoundSensor US(38, 36);
-  digitalWrite(40, HIGH); // part of the US setup
-  digitalWrite(34, LOW); // part of the US setup
+  digitalWrite(40,HIGH);
+  digitalWrite(34,LOW);
 }
 
 void loop() {
