@@ -56,52 +56,22 @@ class bluetooth { // nobject that handles communication with mobile app via blue
       pinMode(bluetooth::_RX, OUTPUT);
       bluetooth::_TX = TX;
       pinMode(bluetooth::_TX, INPUT);
-      bluetooth::beginSerial();
+      bluetooth::_beginSerial();
     }
-    /*
-        bluetooth(int RX, int TX, int GND, int Vcc) { // use this constructor if state and enable are connected directly but Vcc and GND are not
-          bluetooth::_RX = RX;
-          pinMode(bluetooth::_RX, OUTPUT);
-          bluetooth::_TX = TX;
-          pinMode(bluetooth::_TX, INPUT);
-          bluetooth::_GND = GND;
-          pinMode(bluetooth::_GND, OUTPUT);
-          digitalWrite(bluetooth::_GND, LOW);
-          bluetooth::_Vcc = Vcc;
-          pinMode(bluetooth::_Vcc, OUTPUT);
-          digitalWrite(bluetooth::_Vcc, HIGH);
-          bluetooth::beginSerial();
-        }
-        bluetooth(int state, int RX, int TX, int GND, int Vcc, int EN) { // use this constructor if every pin has to be set.
-          // Caution: RX/TX can only handle 3.3 V.
-          bluetooth::_state = state;
-          pinMode(bluetooth::_state, OUTPUT);
-          // set the default state setting here!!!
-          bluetooth::_RX = RX;
-          pinMode(bluetooth::_RX, OUTPUT);
-          bluetooth::_TX = TX;
-          pinMode(bluetooth::_TX, INPUT);
-          bluetooth::_GND = GND;
-          pinMode(bluetooth::_GND, OUTPUT);
-          digitalWrite(bluetooth::_GND, LOW);
-          bluetooth::_Vcc = Vcc;
-          pinMode(bluetooth::_Vcc, OUTPUT);
-          digitalWrite(bluetooth::_Vcc, HIGH);
-          bluetooth::_EN = EN;
-          pinMode(bluetooth::_EN, OUTPUT);
-          // set the default enable setting here!!!
-          bluetooth::beginSerial();
-        }
-    */
-    void beginSerial();
+    void receive();
+    void handleNewData();
+    void getMotorSpeed();
 
   private:
     int _RX;
     int _TX;
-    /*
-      int _state;
-      int _GND;
-      int _Vcc;
-      int _EN;
-    */
+    const static byte _numChars = 32;
+    char _receivedChars[_numChars];
+    bool _newData = false;
+    int _intFromPC = 0;
+    int _motorSpeed = 0;
+
+    void _decideReceivedData();
+    void _parseData();
+    void _beginSerial();
 };
