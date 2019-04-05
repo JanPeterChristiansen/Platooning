@@ -22,13 +22,13 @@ class motor { // Object that handles motors
 
 class ultraSoundSensor { // object that handles the Ultra Sound Sensor
   public:
-    ultraSoundSensor(int trig, int echo) { // use this constructor if Vcc and GND connected directly to 5V and GND
+    ultraSoundSensor(int echo, int trig) { // use this constructor if Vcc and GND connected directly to 5V and GND
       ultraSoundSensor::_trig = trig;
       pinMode(ultraSoundSensor::_trig, OUTPUT);
       ultraSoundSensor::_echo = echo;
       pinMode(ultraSoundSensor::_echo, INPUT);
     }
-    ultraSoundSensor(int trig, int echo, int Vcc, int GND) { // use this constructor if Vcc and GND are digital pins
+    ultraSoundSensor(int GND, int echo, int trig, int Vcc) { // use this constructor if Vcc and GND are digital pins
       ultraSoundSensor::_trig = trig;
       pinMode(ultraSoundSensor::_trig, OUTPUT);
       ultraSoundSensor::_echo = echo;
@@ -50,21 +50,77 @@ class ultraSoundSensor { // object that handles the Ultra Sound Sensor
     int _distance;
 };
 
-motor leftMotor(5, 6, 7);
+class bluetooth { // nobject that handles communication with mobile app via bluetooth
+  public:
+    bluetooth(int RX, int TX) { // use this constructor if Vcc, GND, state and EN are connected directly
+      bluetooth::_RX = RX;
+      pinMode(bluetooth::_RX, OUTPUT);
+      bluetooth::_TX = TX;
+      pinMode(bluetooth::_TX, INPUT);
+      bluetooth::beginSerial();
+    }
+    /*
+      bluetooth(int RX, int TX, int GND, int Vcc) { // use this constructor if state and enable are connected directly but Vcc and GND are not
+      bluetooth::_RX = RX;
+      pinMode(bluetooth::_RX, OUTPUT);
+      bluetooth::_TX = TX;
+      pinMode(bluetooth::_TX, INPUT);
+      bluetooth::_GND = GND;
+      pinMode(bluetooth::_GND, OUTPUT);
+      digitalWrite(bluetooth::_GND, LOW);
+      bluetooth::_Vcc = Vcc;
+      pinMode(bluetooth::_Vcc, OUTPUT);
+      digitalWrite(bluetooth::_Vcc, HIGH);
+      bluetooth::beginSerial();
+      }
+      bluetooth(int state, int RX, int TX, int GND, int Vcc, int EN) { // use this constructor if every pin has to be set.
+      // Caution: RX/TX can only handle 3.3 V.
+      bluetooth::_state = state;
+      pinMode(bluetooth::_state, OUTPUT);
+      // set the default state setting here!!!
+      bluetooth::_RX = RX;
+      pinMode(bluetooth::_RX, OUTPUT);
+      bluetooth::_TX = TX;
+      pinMode(bluetooth::_TX, INPUT);
+      bluetooth::_GND = GND;
+      pinMode(bluetooth::_GND, OUTPUT);
+      digitalWrite(bluetooth::_GND, LOW);
+      bluetooth::_Vcc = Vcc;
+      pinMode(bluetooth::_Vcc, OUTPUT);
+      digitalWrite(bluetooth::_Vcc, HIGH);
+      bluetooth::_EN = EN;
+      pinMode(bluetooth::_EN, OUTPUT);
+      // set the default enable setting here!!!
+      bluetooth::beginSerial();
+      }
+    */
+
+    void beginSerial();
+
+  private:
+    int _RX;
+    int _TX;
+    
+    /*
+      int _state;
+      int _GND;
+      int _Vcc;
+      int _EN;
+    */
+
+};
+
 motor rightMotor(2, 3, 4);
-ultraSoundSensor US(38, 36, 40, 34);
+motor leftMotor(5, 6, 7);
+ultraSoundSensor US(34, 36, 38, 40);
+bluetooth BT(14, 15);
 
 void setup() {
 
-  leftMotor.setMotorSpeed(100);
-  rightMotor.setMotorSpeed(100);
-  delay(1000);
-  leftMotor.stopMotor();
-  rightMotor.stopMotor();
+
 }
 
 void loop() {
-
 
 
 }

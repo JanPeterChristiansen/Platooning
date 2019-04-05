@@ -23,6 +23,7 @@ void motor::stopMotor() { // stops the motor
   digitalWrite(motor::_pin1, LOW); // both pins are low -> wheel does not turn
   digitalWrite(motor::_pin2, LOW);
   analogWrite(motor::_speed, 255); // speedByte is 255 -> 0 speed
+  motor::_speed = 0;
 }
 
 int motor::getSpeed() { // returns the motorSpeed in percent
