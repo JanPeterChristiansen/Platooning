@@ -60,31 +60,42 @@ void bluetooth::handleNewData() { //Triggers when a signal is recived
 }
 
 void bluetooth::_decideReceivedData() {  //Decides what to to with the recived data
-  if (_intFromPC >= 0 && _intFromPC <= 100) {
-    _speed = _intFromPC;
+  if (_intFromPC >= 0 && _intFromPC <= 100) { // speed
+    if (_reverse) { // reverse
+      _speed = -_intFromPC;
+    }
+    else { // forward
+      _speed = _intFromPC;
+    }
+  }
+  else if (_intFromPC >= 900 && _intFromPC <= 1100) {
+    // left to right (turn value)
+    _turn = map(_intFromPC, 900, 1100, -100, 100);
   }
   else {
     switch (_intFromPC) {
-      case 101: //Drive right
+      /*
+        case 101: //Drive right
         // turn = 'R';
         break;
-      case 102: //Drive left
+        case 102: //Drive left
         // turn = 'L';
         break;
+        case 105: //Drive straight
+        // turn = 'S';
+        break;
+      */
       case 103: //Platooning ON
         // platooning = true;
         break;
       case 104: //Platooning OFF
         // platooning = false;
         break;
-      case 105: //Drive straight
-        // turn = 'S';
-        break;
       case 106: //Forwards gear
-        // direction = 'F';
+        _reverse = false;
         break;
       case 107: //Reverse gear
-        // direction = 'R';
+        _reverse = true;
         break;
     }
   }
@@ -92,4 +103,8 @@ void bluetooth::_decideReceivedData() {  //Decides what to to with the recived d
 
 int bluetooth::getSpeed() {
   return _speed;
+}
+
+int bluetooth::getTurn() {
+  return _turn;
 }
