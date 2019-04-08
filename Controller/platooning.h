@@ -49,14 +49,15 @@ class ultraSoundSensor { // object that handles the Ultra Sound Sensor
     int _distance;
 };
 
-class bluetooth { // nobject that handles communication with mobile app via bluetooth
+class bluetooth { // object that handles communication with mobile app via bluetooth
   public:
-    bluetooth(int RX, int TX) { // use this constructor if Vcc, GND, state and EN are connected directly
+    bluetooth(int RX = 14, int TX = 15) { // use this constructor if Vcc, GND, state and EN are connected directly
       bluetooth::_RX = RX;
       pinMode(bluetooth::_RX, OUTPUT);
       bluetooth::_TX = TX;
       pinMode(bluetooth::_TX, INPUT);
-      bluetooth::_beginSerial();
+      // bluetooth::_beginSerial();
+      Serial3.begin(38400);
     }
     void receive();
     void handleNewData();

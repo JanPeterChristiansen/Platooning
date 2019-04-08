@@ -1,11 +1,9 @@
 void bluetooth::_beginSerial() { // starts the correct Serial depending on the specified pins for RX/TX
-  switch (bluetooth::_TX) {
-    case (0):
-      Serial.begin(38400);
-      break;
+  // Not used, BT is always Serial 3 !!!
+  switch (bluetooth::_TX) { 
     case (19):
       Serial1.begin(38400);
-      break;
+        break;
     case (17):
       Serial2.begin(38400);
       break;
@@ -22,8 +20,8 @@ void bluetooth::receive() {
   char endMarker = '>';
   char rc;
 
-  while (Serial.available() > 0 && bluetooth::_newData == false) {
-    rc = Serial.read();
+  while (Serial3.available() > 0 && bluetooth::_newData == false) {
+    rc = Serial3.read();
     if (recvInProgress == true) {
       if (rc != endMarker) {
         bluetooth::_receivedChars[ndx] = rc;
@@ -63,7 +61,7 @@ void bluetooth::handleNewData() { //Triggers when a signal is recived
 
 void bluetooth::_decideReceivedData() {  //Decides what to to with the recived data
   if (bluetooth::_intFromPC >= 0 && bluetooth::_intFromPC <= 100) {
-     bluetooth::_motorSpeed = bluetooth::_intFromPC;
+    bluetooth::_motorSpeed = bluetooth::_intFromPC;
   }
   else {
     switch (bluetooth::_intFromPC) {
