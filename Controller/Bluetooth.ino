@@ -1,9 +1,9 @@
 void bluetooth::_beginSerial() { // starts the correct Serial depending on the specified pins for RX/TX
   // Not used, BT is always Serial 3 !!!
-  switch (bluetooth::_TX) { 
+  switch (_TX) {
     case (19):
       Serial1.begin(38400);
-        break;
+      break;
     case (17):
       Serial2.begin(38400);
       break;
@@ -20,21 +20,21 @@ void bluetooth::receive() {
   char endMarker = '>';
   char rc;
 
-  while (Serial3.available() > 0 && bluetooth::_newData == false) {
+  while (Serial3.available() > 0 && _newData == false) {
     rc = Serial3.read();
     if (recvInProgress == true) {
       if (rc != endMarker) {
-        bluetooth::_receivedChars[ndx] = rc;
+        _receivedChars[ndx] = rc;
         ndx++;
-        if (ndx >= bluetooth::_numChars) {
-          ndx = bluetooth::_numChars - 1;
+        if (ndx >= _numChars) {
+          ndx = _numChars - 1;
         }
       }
       else {
-        bluetooth::_receivedChars[ndx] = '\0'; // terminate the string
+        _receivedChars[ndx] = '\0'; // terminate the string
         recvInProgress = false;
         ndx = 0;
-        bluetooth::_newData = true;
+        _newData = true;
       }
     }
     else if (rc == startMarker) {
@@ -47,24 +47,24 @@ void bluetooth::_parseData() {
   // split the data into its parts
   char * strtokIndx; // this is used by strtok() as an index
 
-  strtokIndx = strtok(bluetooth::_receivedChars, ","); // this continues where the previous call left off
-  bluetooth::_intFromPC = atoi(strtokIndx);     // convert this part to an integer
+  strtokIndx = strtok(_receivedChars, ","); // this continues where the previous call left off
+  _intFromPC = atoi(strtokIndx);     // convert this part to an integer
 }
 
 void bluetooth::handleNewData() { //Triggers when a signal is recived
-  if (bluetooth::_newData == true) {
-    bluetooth::_parseData();
-    bluetooth::_decideReceivedData();
-    bluetooth::_newData = false;
+  if (_newData == true) {
+    _parseData();
+    _decideReceivedData();
+    _newData = false;
   }
 }
 
 void bluetooth::_decideReceivedData() {  //Decides what to to with the recived data
-  if (bluetooth::_intFromPC >= 0 && bluetooth::_intFromPC <= 100) {
-    bluetooth::_motorSpeed = bluetooth::_intFromPC;
+  if (_intFromPC >= 0 && _intFromPC <= 100) {
+    _speed = _intFromPC;
   }
   else {
-    switch (bluetooth::_intFromPC) {
+    switch (_intFromPC) {
       case 101: //Drive right
         // turn = 'R';
         break;
@@ -90,6 +90,6 @@ void bluetooth::_decideReceivedData() {  //Decides what to to with the recived d
   }
 }
 
-void bluetooth::getMotorSpeed() {
-  return bluetooth::_motorSpeed;
+int bluetooth::getSpeed() {
+  return _speed;
 }
