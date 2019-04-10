@@ -1,9 +1,7 @@
 #include "platooning.h"
 
 motor M;
-ultraSoundSensor US;
 bluetooth BT;
-
 
 void setup() {
   Serial.begin(9600);
@@ -11,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-  
+
   BT.receive();
   BT.handleNewData();
 
