@@ -86,7 +86,6 @@ class bluetooth { // object that handles communication with mobile app via bluet
     void handleNewData();
     int getSpeed();
     int getTurn();
-    void beginSerial();
 
   private:
     int RX;
@@ -103,3 +102,28 @@ class bluetooth { // object that handles communication with mobile app via bluet
     void parseData();
     void beginSerial();
 };
+
+class pidControl {
+  public:
+    pidControl(float ref = 20.0, float Kp = 1, float Ki = 0, float Kd = 0) {
+      pidControl::ref = ref;
+      pidControl::Kp = Kp;
+      pidControl::Ki = Ki;
+      pidControl::Kp = Kp;
+
+    }
+
+void setSpeed(int speed);
+int getSpeed();
+void cal(float s);
+
+  private:
+    float ref;
+    int speed;
+    float Kp;
+    float Ki = Kp/100;
+    float Kd;
+    float u, i, d;
+
+};
+

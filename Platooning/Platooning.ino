@@ -2,17 +2,23 @@
 
 motor M;
 bluetooth BT;
-
+pidControl PID;
+ultraSoundSensor DIST;
 void setup() {
   Serial.begin(9600);
+  M.setSpeed(50,0);
 
 }
 
 void loop() {
 
-  BT.receive();
-  BT.handleNewData();
+  PID.setSpeed(M.getSpeed());
+  PID.cal(DIST.getDistance());
+  M.setSpeed(PID.getSpeed());
 
-  M.setSpeed(BT.getSpeed(), BT.getTurn());
+  Serial.print(DIST.getDistance());
+  Serial.print("   ");
+  Serial.println(M.getSpeed());
+  
 
 }
