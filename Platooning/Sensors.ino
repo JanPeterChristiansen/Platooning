@@ -4,7 +4,7 @@ float ultraSoundSensor::getDistance() {
   // float s; // distance based on the time difference
   // send a pulse to trigger
   digitalWrite(trig, HIGH);
-  delay(0.01); 
+  delay(0.01);
   digitalWrite(trig, LOW);
   // measuring the time difference
   t = pulseIn(echo, HIGH); // wait for echo and measure time delay

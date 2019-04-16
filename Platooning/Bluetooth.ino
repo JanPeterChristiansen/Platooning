@@ -89,7 +89,7 @@ void bluetooth::decideReceivedData() {  //Decides what to to with the recived da
         digitalWrite(13, HIGH);
         break;
       case 104: //Platooning OFF
-        digitalWrite(13,LOW);
+        digitalWrite(13, LOW);
         break;
       case 106: //Forwards gear
         reverse = false;

@@ -1,6 +1,6 @@
 class wheel { // Object that handles motors
   public:
-    wheel(int pin1, int pin2, int speedPin) { 
+    wheel(int pin1, int pin2, int speedPin) {
       // Contructor is called with the H-bridge pins aswell as the speedPin
       wheel::pin1 = pin1;
       pinMode(pin1, OUTPUT);
@@ -74,7 +74,7 @@ class ultraSoundSensor { // object that handles the Ultra Sound Sensor
 
 class bluetooth { // object that handles communication with mobile app via bluetooth
   public:
-    bluetooth(int RX = 14, int TX = 15) { 
+    bluetooth(int RX = 14, int TX = 15) {
       bluetooth::RX = RX;
       pinMode(RX, OUTPUT);
       bluetooth::TX = TX;
@@ -86,6 +86,7 @@ class bluetooth { // object that handles communication with mobile app via bluet
     void handleNewData();
     int getSpeed();
     int getTurn();
+    void beginSerial();
 
   private:
     int RX;
