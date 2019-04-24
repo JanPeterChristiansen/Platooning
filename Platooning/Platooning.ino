@@ -2,9 +2,10 @@
 
 motor M;
 bluetooth BT;
+ultraSoundSensor US;
+
 
 void setup() {
-  Serial.begin(9600);
 
 }
 

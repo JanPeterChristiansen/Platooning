@@ -74,7 +74,7 @@ class ultraSoundSensor { // object that handles the Ultra Sound Sensor
 
 class bluetooth { // object that handles communication with mobile app via bluetooth
   public:
-    bluetooth(int RX = 14, int TX = 15) {
+    bluetooth(int RX = 1, int TX = 0) {
       bluetooth::RX = RX;
       pinMode(RX, OUTPUT);
       bluetooth::TX = TX;
@@ -86,7 +86,6 @@ class bluetooth { // object that handles communication with mobile app via bluet
     void handleNewData();
     int getSpeed();
     int getTurn();
-    void beginSerial();
 
   private:
     int RX;
