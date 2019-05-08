@@ -1,5 +1,7 @@
-float ultraSoundSensor::getDistance() {
-  // Measuring the distance from the US sensor in cm
+/* ultraSoundSensor */
+
+void ultraSoundSensor::measureDistance() {
+  // adds a distance measurement to the buffer, in cm
   unsigned long t; // time difference between trig and echo
   // float s; // distance based on the time difference
   // send a pulse to trigger
@@ -8,7 +10,27 @@ float ultraSoundSensor::getDistance() {
   digitalWrite(trig, LOW);
   // measuring the time difference
   t = pulseIn(echo, HIGH); // wait for echo and measure time delay
-  // s = t * 0.034 / 2.0;  // distance in cm
-  // _distance = s; // save the distance to object
-  return t * 0.034 / 2.0; // return the distance in cm
+  distance.addValue(t * 0.034 / 2.0); // add measurement to buffer
+}
+
+float ultraSoundSensor::getDistance() { // returns the ringbuffer mean
+  return distance.mean(); // return ringbuffer mean
+}
+
+
+/* ringBuffer */
+
+void ringBuffer::addValue(float value) { // adds value to buffer
+  buffer[indx++] = value; // add value
+  if (indx > SIZE - 1) { // cycle index
+    indx = 0;
+  }
+}
+
+float ringBuffer::mean() { // calculate buffer mean
+  float sum = 0; // sum of buffer
+  for (int i = 0; i < SIZE; i++) { // sum buffer values
+    sum += buffer[i];
+  }
+  return sum / SIZE; // return mean
 }

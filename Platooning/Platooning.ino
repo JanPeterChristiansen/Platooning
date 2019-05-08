@@ -2,23 +2,35 @@
 
 motor M;
 bluetooth BT;
+ultraSoundSensor US;
 pidControl PID;
-ultraSoundSensor DIST;
+
+const int targetSpeed = 50;
+
 void setup() {
-  Serial.begin(9600);
-  M.setSpeed(50,0);
+  
+  M.setSpeed(targetSpeed);
 
 }
 
 void loop() {
 
+  US.measureDistance();
+
+
+
   PID.setSpeed(M.getSpeed());
-  PID.cal(DIST.getDistance());
+  PID.cal(US.getDistance());
   M.setSpeed(PID.getSpeed());
 
-  Serial.print(DIST.getDistance());
-  Serial.print("   ");
-  Serial.println(M.getSpeed());
-  
+
+
+  if (M.getSpeed() > targetSpeed) {
+    M.setSpeed(targetSpeed);
+  }
+  else if (M.getSpeed() > targetSpeed < -targetSpeed) {
+    M.setSpeed(-targetSpeed);
+  }
+
 
 }
