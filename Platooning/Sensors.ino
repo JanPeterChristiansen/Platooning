@@ -1,8 +1,9 @@
 /* ultraSoundSensor */
 
-void ultraSoundSensor::measureDistance() {
+float ultraSoundSensor::getDistance() {
   // adds a distance measurement to the buffer, in cm
   unsigned long t; // time difference between trig and echo
+  static ringBuffer distance(10);
   // float s; // distance based on the time difference
   // send a pulse to trigger
   digitalWrite(trig, HIGH);
@@ -11,10 +12,7 @@ void ultraSoundSensor::measureDistance() {
   // measuring the time difference
   t = pulseIn(echo, HIGH); // wait for echo and measure time delay
   distance.addValue(t * 0.034 / 2.0); // add measurement to buffer
-}
-
-float ultraSoundSensor::getDistance() { // returns the ringbuffer mean
-  return distance.mean(); // return ringbuffer mean
+  return distance.mean();
 }
 
 

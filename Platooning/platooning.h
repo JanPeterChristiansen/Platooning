@@ -61,7 +61,7 @@ class ringBuffer {
 class ultraSoundSensor { // object that handles the Ultra Sound Sensor
   public:
     ultraSoundSensor(int GND = 34, int echo = 36,
-                     int trig = 38, int Vcc = 40) : distance(10) {
+                     int trig = 38, int Vcc = 40) {
       // use this constructor if Vcc and GND are digital pins
       ultraSoundSensor::trig = trig;
       pinMode(trig, OUTPUT);
@@ -75,14 +75,12 @@ class ultraSoundSensor { // object that handles the Ultra Sound Sensor
       digitalWrite(GND, LOW);
     }
     float getDistance();
-    void measureDistance();
 
   private:
     int trig;
     int echo;
     int Vcc;
     int GND;
-    ringBuffer distance;
 
 };
 
@@ -100,6 +98,7 @@ class bluetooth { // object that handles communication with mobile app via bluet
     void handleNewData();
     int getSpeed();
     int getTurn();
+    bool getPlatooning();
 
   private:
     int RX;
@@ -111,6 +110,7 @@ class bluetooth { // object that handles communication with mobile app via bluet
     int speed = 0;
     int turn = 0;
     bool reverse = false;
+    bool platooning = false;
 
     void decideReceivedData();
     void parseData();
