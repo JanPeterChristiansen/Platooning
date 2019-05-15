@@ -1,6 +1,7 @@
 void wheel::setSpeed(int percent) {
   byte speedByte; // used to set the duty-cycle on the speedPin signal
   percent = constrain(percent, -100, 100); // constrain the percent
+  percent = percent * (1.0 - correction / 100.0); // corrects motorspeed so wheels match
   speed = percent; // save the percent speed to object
   if (percent > 0) { // if direction is forward
     speedByte = map(percent, 0, 100, 255, 0); // map the percent to a byte
@@ -33,6 +34,7 @@ int wheel::getSpeed() { // returns the motorSpeed in percent
 void motor::setSpeed(int speed, int turn = 0) {
   speed = constrain(speed, -100, 100);
   turn = constrain(turn, -100, 100);
+  turn *= 1;
   motor::speed = speed;
   motor::turn = turn;
 

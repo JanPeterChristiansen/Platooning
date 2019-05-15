@@ -86,10 +86,10 @@ void bluetooth::decideReceivedData() {  //Decides what to to with the recived da
         break;
       */
       case 103: //Platooning ON
-        digitalWrite(13, HIGH);
+        platooning = true;
         break;
       case 104: //Platooning OFF
-        digitalWrite(13, LOW);
+        platooning = false;
         break;
       case 106: //Forwards gear
         reverse = false;
@@ -107,4 +107,8 @@ int bluetooth::getSpeed() {
 
 int bluetooth::getTurn() {
   return turn;
+}
+
+bool bluetooth::getPlatooning() {
+  return platooning;
 }
