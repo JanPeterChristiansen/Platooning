@@ -1,7 +1,7 @@
 #include "platooning.h"
 
 motor M;
-bluetooth BT;
+// bluetooth BT;
 ultraSoundSensor US;
 pidControl PID;
 
@@ -12,28 +12,17 @@ void setup() {
 }
 
 void loop() {
-  BT.receive();
-  BT.handleNewData();
 
+  PID.setSpeed(M.getSpeed());
+  PID.cal(US.getDistance());
 
-  if (BT.getPlatooning()) {
-    
-    PID.setSpeed(M.getSpeed());
-    PID.cal(US.getDistance());
-    
-    if (PID.getSpeed() > targetSpeed) {
-      M.setSpeed(targetSpeed);
-    }
-    else if (PID.getSpeed() < -targetSpeed) {
-      M.setSpeed(-targetSpeed);
-    }
-    else {
-      M.setSpeed(PID.getSpeed());
-    }
-    
+  if (PID.getSpeed() > targetSpeed) {
+    M.setSpeed(targetSpeed);
+  }
+  else if (PID.getSpeed() < -targetSpeed) {
+    M.setSpeed(-targetSpeed);
   }
   else {
-    
-    M.setSpeed(BT.getSpeed(), BT.getTurn());
+    M.setSpeed(PID.getSpeed());
   }
 }

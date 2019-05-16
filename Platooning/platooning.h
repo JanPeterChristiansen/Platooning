@@ -1,13 +1,13 @@
 class wheel { // Object that handles motors
   public:
-    wheel(int pin1, int pin2, int speedPin, float correction) {
+    wheel(int pin1, int pin2, float correction) {
       // Contructor is called with the H-bridge pins aswell as the speedPin
       wheel::pin1 = pin1;
       pinMode(pin1, OUTPUT);
       wheel::pin2 = pin2;
       pinMode(pin2, OUTPUT);
-      wheel::speedPin = speedPin;
-      pinMode(speedPin, OUTPUT);
+      // wheel::speedPin = speedPin;
+      // pinMode(speedPin, OUTPUT);
       wheel::correction = correction;
     }
     void setSpeed(int percent); // turns on the motor with the given speed
@@ -24,11 +24,11 @@ class wheel { // Object that handles motors
 
 class motor {
   public:
-    motor(int rightPin1 = 2, int rightPin2 = 3, int rightSpeedPin = 6,
-          int leftPin1 = 4, int leftPin2 = 5, int leftSpeedPin = 7,
-          int rightCorrection = 20, int leftCorrection = 0) :
-      right(rightPin1, rightPin2, rightSpeedPin, rightCorrection),
-      left(leftPin1, leftPin2, leftSpeedPin, leftCorrection) {}
+    motor(int rightPin1 = 2, int rightPin2 = 3,
+          int leftPin1 = 4, int leftPin2 = 5,
+          int rightCorrection = 0, int leftCorrection = 0) :
+      right(rightPin1, rightPin2, rightCorrection),
+      left(leftPin1, leftPin2, leftCorrection) {}
     void setSpeed(int speed, int turn = 0);
     int getSpeed();
     int getTurn();

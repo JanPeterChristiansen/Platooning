@@ -5,15 +5,17 @@ void wheel::setSpeed(int percent) {
   speed = percent; // save the percent speed to object
   if (percent > 0) { // if direction is forward
     speedByte = map(percent, 0, 100, 255, 0); // map the percent to a byte
-    analogWrite(speedPin, speedByte); // set the speed signal
-    digitalWrite(pin2, HIGH); // turn the wheels forward
+    // analogWrite(speedPin, speedByte); // set the speed signal
+    // digitalWrite(pin2, HIGH); // turn the wheels forward
+    analogWrite(pin2,speedByte);
     digitalWrite(pin1, LOW);
   }
   else if (percent < 0) { // if direction is backwards
     speedByte = map(-percent, 0, 100, 255, 0); // map the percent to a byte
-    analogWrite(speedPin, speedByte); // set the speed signal
+    // analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, LOW); // turn the wheels backwards
-    digitalWrite(pin1, HIGH);
+    //digitalWrite(pin1, HIGH);
+    analogWrite(pin1,speedByte);
   }
   else { // if percent is 0
     stop(); // stopping the motor
@@ -23,7 +25,7 @@ void wheel::setSpeed(int percent) {
 void wheel::stop() { // stops the motor
   digitalWrite(pin1, LOW); // both pins are low -> wheel does not turn
   digitalWrite(pin2, LOW);
-  analogWrite(speedPin, 255); // speedByte is 255 -> 0 speed
+  // analogWrite(speedPin, 255); // speedByte is 255 -> 0 speed
   speed = 0;
 }
 
