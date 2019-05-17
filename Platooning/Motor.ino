@@ -4,14 +4,14 @@ void wheel::setSpeed(int percent) {
   percent = percent * (1.0 - correction / 100.0); // corrects motorspeed so wheels match
   speed = percent; // save the percent speed to object
   if (percent > 0) { // if direction is forward
-    speedByte = map(percent, 0, 100, 255, 0); // map the percent to a byte
+    speedByte = map(percent, 0, 100, 0, 255); // map the percent to a byte
     // analogWrite(speedPin, speedByte); // set the speed signal
     // digitalWrite(pin2, HIGH); // turn the wheels forward
     analogWrite(pin2,speedByte);
     digitalWrite(pin1, LOW);
   }
   else if (percent < 0) { // if direction is backwards
-    speedByte = map(-percent, 0, 100, 255, 0); // map the percent to a byte
+    speedByte = map(-percent, 0, 100, 0, 255); // map the percent to a byte
     // analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, LOW); // turn the wheels backwards
     //digitalWrite(pin1, HIGH);
