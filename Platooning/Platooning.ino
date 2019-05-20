@@ -5,22 +5,49 @@ bluetooth BT;
 ultraSoundSensor US;
 pidControl PID;
 
-const int targetSpeed = 75;
+const int targetSpeed = 50;
 
 void setup() {
-
+  Serial.begin(9600);
 }
 
 void loop() {
-  BT.receive();
-  BT.handleNewData();
+  delay(50);
+
+  float s = US.getDistance();
+
+  PID.setSpeed(M.getSpeed());
+  PID.cal(s);
+
+  if (PID.getSpeed() > targetSpeed) {
+    M.setSpeed(targetSpeed);
+  }
+  else if (PID.getSpeed() < -targetSpeed) {
+    M.setSpeed(-targetSpeed);
+  }
+  else {
+    M.setSpeed(PID.getSpeed());
+  }
 
 
-  if (BT.getPlatooning()) {
-    
+  Serial.print(millis());
+  Serial.print(",");
+  Serial.print(M.getSpeed());
+  Serial.print(",");
+  Serial.println(s);
+
+
+
+  /*
+    BT.receive();
+    BT.handleNewData();
+
+
+    if (BT.getPlatooning()) {
+
     PID.setSpeed(M.getSpeed());
     PID.cal(US.getDistance());
-    
+
     if (PID.getSpeed() > targetSpeed) {
       M.setSpeed(targetSpeed);
     }
@@ -30,10 +57,11 @@ void loop() {
     else {
       M.setSpeed(PID.getSpeed());
     }
-    
-  }
-  else {
-    
+
+    }
+    else {
+
     M.setSpeed(BT.getSpeed(), BT.getTurn());
-  }
+    }
+  */
 }

@@ -19,7 +19,6 @@ void pidControl::cal(float s) {
   d = e;
 
   u = P + I + D;
-
+  u /= 100;
   speed += u;
 }
-
