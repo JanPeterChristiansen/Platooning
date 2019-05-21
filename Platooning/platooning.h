@@ -26,7 +26,7 @@ class motor {
   public:
     motor(int rightPin1 = 2, int rightPin2 = 3, int rightSpeedPin = 6,
           int leftPin1 = 4, int leftPin2 = 5, int leftSpeedPin = 7,
-          int rightCorrection = 40, int leftCorrection = 0) :
+          int rightCorrection = 20, int leftCorrection = 0) :
       right(rightPin1, rightPin2, rightSpeedPin, rightCorrection),
       left(leftPin1, leftPin2, leftSpeedPin, leftCorrection) {}
     void setSpeed(int speed, int turn = 0);

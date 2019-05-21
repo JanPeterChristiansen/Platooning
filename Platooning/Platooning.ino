@@ -7,17 +7,40 @@ pidControl PID;
 
 const int targetSpeed = 50;
 
+const int deadZone = 35;      //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const int minStartSpeed = 85; //!!!!!!!!!
+bool startNeeded = false;     //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+int delayTime = 150;          //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  delay(50);
 
   float s = US.getDistance();
 
   PID.setSpeed(M.getSpeed());
   PID.cal(s);
+
+
+
+  if (PID.getSpeed() < deadZone && PID.getSpeed() > -deadZone ) {       //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    startNeeded = true;
+  }
+
+  if (PID.getSpeed() > deadZone && startNeeded == true) {
+    M.setSpeed(minStartSpeed);
+    delay(delayTime);
+    M.setSpeed(PID.getSpeed());
+    startNeeded = false;
+  }
+  else if (PID.getSpeed() < -deadZone && startNeeded == true) {
+    M.setSpeed(-minStartSpeed);
+    delay(delayTime);
+    M.setSpeed(PID.getSpeed());
+    startNeeded = false;
+  }                                     //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   if (PID.getSpeed() > targetSpeed) {
     M.setSpeed(targetSpeed);
@@ -30,11 +53,13 @@ void loop() {
   }
 
 
-  Serial.print(millis());
-  Serial.print(",");
+ // Serial.print(millis());
+ // Serial.print(",");
   Serial.print(M.getSpeed());
   Serial.print(",");
   Serial.println(s);
+ // Serial.print(",");
+ // Serial.println(startNeeded);
 
 
 
