@@ -1,22 +1,38 @@
 void wheel::setSpeed(int percent) {
+  unsigned long t0 = millis();
   byte speedByte; // used to set the duty-cycle on the speedPin signal
   percent = constrain(percent, -100, 100); // constrain the percent
   percent = percent * (1.0 - correction / 100.0); // corrects motorspeed so wheels match
   speed = percent; // save the percent speed to object
   if (percent > 0) { // if direction is forward
     speedByte = map(percent, 0, 100, 255, 0); // map the percent to a byte
-    analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, HIGH); // turn the wheels forward
     digitalWrite(pin1, LOW);
+    if (startUp) {
+      digitalWrite(speedPin, HIGH);
+      delay(10);
+    }
+    analogWrite(speedPin, speedByte); // set the speed signal
   }
   else if (percent < 0) { // if direction is backwards
     speedByte = map(-percent, 0, 100, 255, 0); // map the percent to a byte
-    analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, LOW); // turn the wheels backwards
     digitalWrite(pin1, HIGH);
-  }
+    if (startUp) {
+      digitalWrite(speedPin, HIGH);
+      delay(10);
+    }
+    analogWrite(speedPin, speedByte); // set the speed signal
+  } 
   else { // if percent is 0
     stop(); // stopping the motor
+  }
+
+  if (speed < 25) {
+    startUp = true;
+  }
+  else {
+    startUp = false;
   }
 }
 

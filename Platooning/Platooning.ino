@@ -12,7 +12,8 @@ void setup() {
 }
 
 void loop() {
-  delay(50);
+
+  delay(25);
 
   float s = US.getDistance();
 
@@ -35,7 +36,6 @@ void loop() {
   Serial.print(M.getSpeed());
   Serial.print(",");
   Serial.println(s);
-
 
 
   /*

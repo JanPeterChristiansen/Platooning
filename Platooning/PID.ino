@@ -1,5 +1,5 @@
 void pidControl::setSpeed(int speed) {
-  pidControl:: speed = speed;
+  pidControl::speed = speed;
 }
 int pidControl::getSpeed() {
   return speed;

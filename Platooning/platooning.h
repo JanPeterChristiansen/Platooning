@@ -1,6 +1,6 @@
 class wheel { // Object that handles motors
   public:
-    wheel(int pin1, int pin2, int speedPin, float correction) {
+    wheel(int pin1, int pin2, int speedPin, int correction) {
       // Contructor is called with the H-bridge pins aswell as the speedPin
       wheel::pin1 = pin1;
       pinMode(pin1, OUTPUT);
@@ -20,6 +20,7 @@ class wheel { // Object that handles motors
     int speedPin;
     int speed;
     int correction;
+    bool startUp = true;
 };
 
 class motor {
@@ -119,7 +120,7 @@ class bluetooth { // object that handles communication with mobile app via bluet
 
 class pidControl {
   public:
-    pidControl(float ref = 20.0, float Kp = 50, float Ki = 0, float Kd = 0) {
+    pidControl(float ref = 20.0, float Kp = 100, float Ki = 0, float Kd = 0) {
       pidControl::ref = ref;
       pidControl::Kp = Kp;
       pidControl::Ki = Ki;
