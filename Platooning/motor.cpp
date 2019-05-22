@@ -1,9 +1,9 @@
 #include "Arduino.h"
 #include "motor.h"
 
-motor::motor(int rightPin1 = 2, int rightPin2 = 3, int rightSpeedPin = 6,
-             int leftPin1 = 4, int leftPin2 = 5, int leftSpeedPin = 7,
-             int rightCorrection = 0, int leftCorrection = 0) :
+motor::motor(int leftCorrection = 0, int rightCorrection = 0,
+             int rightPin1 = 2, int rightPin2 = 3, int rightSpeedPin = 6,
+             int leftPin1 = 4, int leftPin2 = 5, int leftSpeedPin = 7) :
   right(rightPin1, rightPin2, rightSpeedPin, rightCorrection),
   left(leftPin1, leftPin2, leftSpeedPin, leftCorrection) {}
 

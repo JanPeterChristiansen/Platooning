@@ -3,7 +3,7 @@
 #include "bluetooth.h"
 #include "pidControl.h"
 
-motor M;
+motor M(20,0);
 bluetooth BT(false); // true: platooning ON; false: platooning OFF
 ultraSoundSensor US;
 pidControl PID;
@@ -20,49 +20,49 @@ void setup() {}
 
 void loop() {
 
-      // Measure and receive information
-      float s = US.getDistance();
-      BT.receive();
-      BT.handleNewData();
+  // Measure and receive information
+  float s = US.getDistance();
+  BT.receive();
+  BT.handleNewData();
 
 
-      if (BT.getPlatooning()) { // platooning is set to ON
+  if (BT.getPlatooning()) { // platooning is set to ON
 
-        // run PID control loop
-        PID.setSpeed(M.getSpeed());
-        PID.cal(US.getDistance());
+    // run PID control loop
+    PID.setSpeed(M.getSpeed());
+    PID.cal(US.getDistance());
 
-        // check for too low motor speed
-        if (PID.getSpeed() < deadZone && PID.getSpeed() > -deadZone ) {
-          startNeeded = true;
-        }
-        if (PID.getSpeed() > deadZone && startNeeded == true) {
-          M.setSpeed(minStartSpeed);
-          delay(delayTime);
-          M.setSpeed(PID.getSpeed());
-          startNeeded = false;
-        }
-        else if (PID.getSpeed() < -deadZone && startNeeded == true) {
-          M.setSpeed(-minStartSpeed);
-          delay(delayTime);
-          M.setSpeed(PID.getSpeed());
-          startNeeded = false;
-        }
+    // check for too low motor speed
+    if (PID.getSpeed() < deadZone && PID.getSpeed() > -deadZone ) {
+      startNeeded = true;
+    }
+    if (PID.getSpeed() > deadZone && startNeeded == true) {
+      M.setSpeed(minStartSpeed);
+      delay(delayTime);
+      M.setSpeed(PID.getSpeed());
+      startNeeded = false;
+    }
+    else if (PID.getSpeed() < -deadZone && startNeeded == true) {
+      M.setSpeed(-minStartSpeed);
+      delay(delayTime);
+      M.setSpeed(PID.getSpeed());
+      startNeeded = false;
+    }
 
-        // constrain motor speed
-        if (PID.getSpeed() > targetSpeed) {
-          M.setSpeed(targetSpeed);
-        }
-        else if (PID.getSpeed() < -targetSpeed) {
-          M.setSpeed(-targetSpeed);
-        }
-        else {
-          M.setSpeed(PID.getSpeed());
-        }
+    // constrain motor speed
+    if (PID.getSpeed() > targetSpeed) {
+      M.setSpeed(targetSpeed);
+    }
+    else if (PID.getSpeed() < -targetSpeed) {
+      M.setSpeed(-targetSpeed);
+    }
+    else {
+      M.setSpeed(PID.getSpeed());
+    }
 
-      }
-      else { // platooning is set to OFF
-        M.setSpeed(BT.getSpeed(), BT.getTurn());
-      }
+  }
+  else { // platooning is set to OFF
+    M.setSpeed(BT.getSpeed(), BT.getTurn());
+  }
 
 }
