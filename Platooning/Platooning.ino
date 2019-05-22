@@ -4,7 +4,7 @@
 #include "pidControl.h"
 
 motor M;
-bluetooth BT;
+bluetooth BT(false); // true: platooning ON; false: platooning OFF
 ultraSoundSensor US;
 pidControl PID;
 

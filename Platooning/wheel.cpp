@@ -22,10 +22,6 @@ void wheel::setSpeed(float percent) {
     analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, HIGH); // turn the wheels forward
     digitalWrite(pin1, LOW);
-    if (startUp) {
-      digitalWrite(speedPin, HIGH);
-      delay(10);
-    }
     analogWrite(speedPin, speedByte); // set the speed signal
   }
   else if (percent < 0) { // if direction is backwards
@@ -33,22 +29,12 @@ void wheel::setSpeed(float percent) {
     analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, LOW); // turn the wheels backwards
     digitalWrite(pin1, HIGH);
-    if (startUp) {
-      digitalWrite(speedPin, HIGH);
-      delay(10);
-    }
     analogWrite(speedPin, speedByte); // set the speed signal
   } 
   else { // if percent is 0
     stop(); // stopping the motor
   }
 
-  if (speed < 25) {
-    startUp = true;
-  }
-  else {
-    startUp = false;
-  }
 }
 
 void wheel::stop() { // stops the motor
