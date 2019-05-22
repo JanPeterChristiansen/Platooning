@@ -1,16 +1,30 @@
-void wheel::setSpeed(int percent) {
+#include "Arduino.h"
+#include "wheel.h"
+
+wheel::wheel(int pin1, int pin2, int speedPin, int correction) {
+  // Contructor is called with the H-bridge pins aswell as the speedPin
+  wheel::pin1 = pin1;
+  pinMode(pin1, OUTPUT);
+  wheel::pin2 = pin2;
+  pinMode(pin2, OUTPUT);
+  wheel::speedPin = speedPin;
+  pinMode(speedPin, OUTPUT);
+  wheel::correction = correction;
+}
+
+void wheel::setSpeed(float percent) {
   byte speedByte; // used to set the duty-cycle on the speedPin signal
-  percent = constrain(percent, -100, 100); // constrain the percent
+  percent = constrainf(percent, -100, 100); // constrain the percent
   percent = percent * (1.0 - correction / 100.0); // corrects motorspeed so wheels match
   speed = percent; // save the percent speed to object
   if (percent > 0) { // if direction is forward
-    speedByte = map(percent, 0, 100, 255, 0); // map the percent to a byte
+    speedByte = mapf(percent, 0, 100, 255, 0); // map the percent to a byte
     analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, HIGH); // turn the wheels forward
     digitalWrite(pin1, LOW);
   }
   else if (percent < 0) { // if direction is backwards
-    speedByte = map(-percent, 0, 100, 255, 0); // map the percent to a byte
+    speedByte = mapf(-percent, 0, 100, 255, 0); // map the percent to a byte
     analogWrite(speedPin, speedByte); // set the speed signal
     digitalWrite(pin2, LOW); // turn the wheels backwards
     digitalWrite(pin1, HIGH);
@@ -27,43 +41,6 @@ void wheel::stop() { // stops the motor
   speed = 0;
 }
 
-int wheel::getSpeed() { // returns the motorSpeed in percent
+float wheel::getSpeed() { // returns the motorSpeed in percent
   return speed; // positive is forward and negative is backwards
-}
-
-void motor::setSpeed(int speed, int turn = 0) {
-  speed = constrain(speed, -100, 100);
-  turn = constrain(turn, -100, 100);
-  turn *= 1;
-  motor::speed = speed;
-  motor::turn = turn;
-
-  if (turn > 0) {
-    right.setSpeed(speed * (1.0 - turn / 100.0));
-    left.setSpeed(speed);
-  }
-  else if (turn < 0) {
-    right.setSpeed(speed);
-    left.setSpeed(speed * (1.0 + turn / 100.0));
-  }
-  else {
-    right.setSpeed(speed);
-    left.setSpeed(speed);
-  }
-}
-
-int motor::getRightSpeed() {
-  return right.getSpeed();
-}
-
-int motor::getLeftSpeed() {
-  return left.getSpeed();
-}
-
-int motor::getSpeed() {
-  return speed;
-}
-
-int motor::getTurn() {
-  return turn;
 }

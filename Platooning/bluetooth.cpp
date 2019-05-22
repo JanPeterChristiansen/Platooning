@@ -1,3 +1,16 @@
+#include "Arduino.h"
+#include "bluetooth.h"
+
+bluetooth::bluetooth(bool platooning = false, int RX = 15, int TX = 14) {
+  bluetooth::RX = RX;
+  pinMode(RX, OUTPUT);
+  bluetooth::TX = TX;
+  pinMode(TX, INPUT);
+  // beginSerial();
+  Serial3.begin(38400);
+  bluetooth::platooning = platooning;
+}
+
 void bluetooth::beginSerial() { // starts the correct Serial depending on the specified pins for RX/TX
   // Not used, BT is always Serial 3 !!!
   switch (TX) {
@@ -74,17 +87,6 @@ void bluetooth::decideReceivedData() {  //Decides what to to with the recived da
   }
   else {
     switch (intFromPC) {
-      /*
-        case 101: //Drive right
-        // turn = 'R';
-        break;
-        case 102: //Drive left
-        // turn = 'L';
-        break;
-        case 105: //Drive straight
-        // turn = 'S';
-        break;
-      */
       case 103: //Platooning ON
         platooning = true;
         break;

@@ -1,92 +1,69 @@
-#include "platooning.h"
+#include "motor.h"
+#include "ultraSoundSensor.h"
+#include "bluetooth.h"
+#include "pidControl.h"
 
 motor M;
 bluetooth BT;
 ultraSoundSensor US;
 pidControl PID;
 
+
+
 const int targetSpeed = 50;
+const int deadZone = 35;
+const int minStartSpeed = 100;
+const int delayTime = 150;
+bool startNeeded = false;
 
-const int deadZone = 35;      //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const int minStartSpeed = 85; //!!!!!!!!!
-bool startNeeded = false;     //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-int delayTime = 150;          //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void setup() {
-  Serial.begin(9600);
-}
+void setup() {}
 
 void loop() {
 
-  float s = US.getDistance();
-
-  PID.setSpeed(M.getSpeed());
-  PID.cal(s);
-
-
-
-  if (PID.getSpeed() < deadZone && PID.getSpeed() > -deadZone ) {       //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    startNeeded = true;
-  }
-
-  if (PID.getSpeed() > deadZone && startNeeded == true) {
-    M.setSpeed(minStartSpeed);
-    delay(delayTime);
-    M.setSpeed(PID.getSpeed());
-    startNeeded = false;
-  }
-  else if (PID.getSpeed() < -deadZone && startNeeded == true) {
-    M.setSpeed(-minStartSpeed);
-    delay(delayTime);
-    M.setSpeed(PID.getSpeed());
-    startNeeded = false;
-  }                                     //// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  if (PID.getSpeed() > targetSpeed) {
-    M.setSpeed(targetSpeed);
-  }
-  else if (PID.getSpeed() < -targetSpeed) {
-    M.setSpeed(-targetSpeed);
-  }
-  else {
-    M.setSpeed(PID.getSpeed());
-  }
+      // Measure and receive information
+      float s = US.getDistance();
+      BT.receive();
+      BT.handleNewData();
 
 
- // Serial.print(millis());
- // Serial.print(",");
-  Serial.print(M.getSpeed());
-  Serial.print(",");
-  Serial.println(s);
- // Serial.print(",");
- // Serial.println(startNeeded);
+      if (BT.getPlatooning()) { // platooning is set to ON
 
+        // run PID control loop
+        PID.setSpeed(M.getSpeed());
+        PID.cal(US.getDistance());
 
+        // check for too low motor speed
+        if (PID.getSpeed() < deadZone && PID.getSpeed() > -deadZone ) {
+          startNeeded = true;
+        }
+        if (PID.getSpeed() > deadZone && startNeeded == true) {
+          M.setSpeed(minStartSpeed);
+          delay(delayTime);
+          M.setSpeed(PID.getSpeed());
+          startNeeded = false;
+        }
+        else if (PID.getSpeed() < -deadZone && startNeeded == true) {
+          M.setSpeed(-minStartSpeed);
+          delay(delayTime);
+          M.setSpeed(PID.getSpeed());
+          startNeeded = false;
+        }
 
-  /*
-    BT.receive();
-    BT.handleNewData();
+        // constrain motor speed
+        if (PID.getSpeed() > targetSpeed) {
+          M.setSpeed(targetSpeed);
+        }
+        else if (PID.getSpeed() < -targetSpeed) {
+          M.setSpeed(-targetSpeed);
+        }
+        else {
+          M.setSpeed(PID.getSpeed());
+        }
 
-
-    if (BT.getPlatooning()) {
-
-    PID.setSpeed(M.getSpeed());
-    PID.cal(US.getDistance());
-
-    if (PID.getSpeed() > targetSpeed) {
-      M.setSpeed(targetSpeed);
-    }
-    else if (PID.getSpeed() < -targetSpeed) {
-      M.setSpeed(-targetSpeed);
-    }
-    else {
-      M.setSpeed(PID.getSpeed());
-    }
-
-    }
-    else {
-
-    M.setSpeed(BT.getSpeed(), BT.getTurn());
-    }
-  */
+      }
+      else { // platooning is set to OFF
+        M.setSpeed(BT.getSpeed(), BT.getTurn());
+      }
+      
 }
